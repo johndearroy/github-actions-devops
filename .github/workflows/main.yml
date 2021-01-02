@@ -11,13 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: checkout
-      - run: mkdir -p /tmp/.build #create a .build folder
+        run: mkdir -p /tmp/.build #create a .build folder
       - name: Install Meteor
-      - run: |
+        run: |
             # only install meteor if bin isn't found
             command -v meteor >/dev/null 2>&1 || curl https://install.meteor.com | /bin/sh
       - name: Check versions
-      - run: |
+        run: |
             echo "Meteor version:"
             # this forces Meteor to download whatever release your project is using
             meteor --version
@@ -27,10 +27,10 @@ jobs:
             echo "Meteor npm version:"
             meteor npm -v
       - name: Install npm packages
-      - run: |
+        run: |
             meteor npm install --save bcrypt
             meteor npm install --production
       - name: Build the Meteor app as a normal NodeJS app
-      - run: |
+        run: |
             mv ./Dockerfile /tmp/.build/Dockerfile #move the Dockerfile to .build folder
             meteor build --architecture=os.linux.x86_64 /tmp/.build
