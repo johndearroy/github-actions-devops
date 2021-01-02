@@ -32,5 +32,13 @@ jobs:
             meteor npm install --production
       - name: Build the Meteor app as a normal NodeJS app
         run: |
-            mv ./Dockerfile /tmp/.build/Dockerfile #move the Dockerfile to .build folder
             meteor build --architecture=os.linux.x86_64 /tmp/.build
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployinh to Heroku
+      - uses: akhileshns/heroku-deploy@v3.8.8
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+        heroku_email: ${{secrets.HEROKU_EMAIL}}
