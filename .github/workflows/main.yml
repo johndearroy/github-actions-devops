@@ -34,11 +34,13 @@ jobs:
         run: |
             meteor build --architecture=os.linux.x86_64 /tmp/.build
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.8.8
       - name: Deployinh to Heroku
-      with:
-        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-        heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-        heroku_email: ${{secrets.HEROKU_EMAIL}}
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
