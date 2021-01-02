@@ -11,7 +11,6 @@ jobs:
     steps:
       - name: checkout
       - run: mkdir -p /tmp/.build #create a .build folder
-
       - name: Install Meteor
       - run: |
             # only install meteor if bin isn't found
