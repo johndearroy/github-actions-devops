@@ -9,9 +9,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+      - run: mkdir -p /tmp/.build #create a .build folder
+
+      - name: Install Meteor
+      - run: |
+            # only install meteor if bin isn't found
+            command -v meteor >/dev/null 2>&1 || curl https://install.meteor.com | /bin/sh
+      - name: Check versions
+      - run: |
+            echo "Meteor version:"
+            # this forces Meteor to download whatever release your project is using
+            meteor --version
+            which meteor
+            echo "Meteor node version:"
+            meteor node -v
+            echo "Meteor npm version:"
+            meteor npm -v
+      - name: Install npm packages
+      - run: |
+            meteor npm install --save bcrypt
+            meteor npm install --production
+      - name: Build the Meteor app as a normal NodeJS app
+      - run: |
+            mv ./Dockerfile /tmp/.build/Dockerfile #move the Dockerfile to .build folder
+            meteor build --architecture=os.linux.x86_64 /tmp/.build
+
       - uses: akhileshns/heroku-deploy@v3.8.8
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+        heroku_email: ${{secrets.HEROKU_EMAIL}}
